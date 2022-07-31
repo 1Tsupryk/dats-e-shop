@@ -175,21 +175,22 @@ class Console:
 
     def get_product_id(self, category):
         """Getting product id for buying, deleting or updating"""
-        print("-"*50)        
+        print("-"*50)
         self.id = input("Enter id of the product or R to return: ").strip().lower()
-        try:
-            if self.id == "r":
-                self.return_back(self.current_position)
-            elif self.id.isdigit():
-                self.id = int(self.id)
-            if self.id >= len(category):
-                print("-"*50)
-                print("We don't have product with such id, try again.")
-                self.get_product_id(category)
-        except TypeError:
-                print("-"*50)
-                print("Invalid input, try again.")
-                self.get_product_id(category)
+        if self.id == "r":
+            self.return_back(self.current_position)     
+        else:   
+            try:
+                if self.id.isdigit():
+                    self.id = int(self.id)
+                if self.id >= len(category):
+                    print("-"*50)
+                    print("We don't have product with such id, try again.")
+                    self.get_product_id(category)
+            except TypeError:
+                    print("-"*50)
+                    print("Invalid input, try again.")
+                    self.get_product_id(category)
 
     def show_products_list(self, category):
         """Printing list of products of certain category"""
