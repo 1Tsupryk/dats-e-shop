@@ -20,13 +20,16 @@ class Console:
         print("-"*50)       
         print(("Enter B to check your balance.\n"
         "Enter C to choose category.\n"
-        "Enter A to sign in as Admin.\n"))
+        "Enter A to sign in as Admin.\n"
+        "Enter Q to quit the shop."))
+        print("-"*50)
         self.action = input("Please, choose the option: ").strip().lower()
         self.__is_valid_user_action(self.action)
     
     def __is_valid_user_action(self, user_action):
         """User action validation"""        
-        if user_action != "b" and user_action != "c" and user_action != "a":
+        if (user_action != "b" and user_action != "c" and user_action != "a"
+        and user_action != "q"):
             print("-"*50)
             print("Input is invalid, try again.")
             self.read_user_action()

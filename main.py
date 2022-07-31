@@ -3,11 +3,13 @@ from database import *
 
 user = Console()
 db = Database()
+is_active = True
+
 
 print("Welcome to the DATS e-shop!")
 user.read_user_action()
 
-while True:
+while is_active:
     match user.current_position:
         case "start":
             if user.action == "b":
@@ -20,6 +22,9 @@ while True:
                     user.password_creation(db)
                 else:
                     user.ask_for_password(db.password)
+            elif user.action == "q":
+                print("-"*50)
+                is_active = False
         case "category_choosing":
             user.current_position = "product_buying"
             user.show_products_list(user.category)
