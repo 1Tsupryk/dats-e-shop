@@ -11,40 +11,31 @@ class Database:
         self.video = []
         self.fan = []
 
-    def ADD(self, category, characteristics):
+    def add_product(self, category, characteristics):
         """Adding new product to the list of certain category"""        
         self.new_ID = {"ID":len(category)}
         category.append({**self.new_ID, **characteristics})
-        print("-"*50)
-        print("Product successfully added!")
 
-    def DELETE(self, category, id, position="db_action"):
+    def delete_product(self, category, id):
         """Removing a specific product from the list"""        
         del category[id]
         try:
             for product in category[id:]:
                 product["ID"] -= 1
-            if position == "db_action":
-                print("-"*50)
-                print("Product successfully deleted!")
         except IndexError:
-            if position == "db_action":
-                print("-"*50)
-                print("Product successfully deleted!")
+            pass
     
-    def UPDATE(self, category, id, changes):
+    def update_product(self, category_name, id, changes):
         """Updating a specific product from the list"""
         self.new_ID = {"ID":id}  
-        category[id] = {**self.new_ID, **changes}
-        print("-"*50)
-        print("Product successfully updated!")
+        getattr(self, category_name)[id] = {**self.new_ID, **changes}
 
-    def EARN(self):
-        """Refilling balance"""
-        try:
-            print("-"*50)
-            self.balance = int(input("Enter the number to top up the account(For example: 300): "))
-        except ValueError:
-            print("-"*50)
-            print("Invalid input, try again.")
-            self.EARN()
+    def buy_product(self, category, id, number):
+        """Reduces the balance and quantity of the product"""        
+        self.balance -= category[id]["Price"]*number
+        category[id]["Number"] -= number
+        if category[id]["Number"] == 0:
+            self.DELETE(category, id)
+
+    def get_products_list(self, category_name):
+        return getattr(self, category_name)

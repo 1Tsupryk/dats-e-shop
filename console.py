@@ -195,16 +195,6 @@ class Console:
                     print("Invalid input, try again.")
                     self.get_product_id(category)
 
-    def show_products_list(self, category):
-        """Printing list of products of certain category"""
-        print("-"*50)    
-        for product in category:
-            print("ID: ", product["ID"])
-            print("Name: ", product["Name"])
-            print("Number: ", product["Number"])
-            print("Price: ", product["Price"])
-            print("-"*50)
-
     def get_number_of_product(self, category):
         """Getting number of products to buy""" 
         try:
@@ -223,26 +213,6 @@ class Console:
             print("Invalid input, try again.")
             self.get_number_of_product(category)
 
-    def buy_product(self, category, id, number, db):
-        """Withdraws a certain amount of money from the balance, changes the number of products"""        
-        if category[id]["Number"] - number < 0:
-            print("-"*50)
-            print("We don't have this number of products.")
-            self.show_products_list(self.category)
-            self.get_product_id(category)
-        elif db.balance - category[id]["Price"]*number < 0:
-            print("-"*50)
-            print("You don't have enough money to buy this product.")
-            self.show_products_list(self.category)
-            self.get_product_id(category)
-        else:
-            db.balance -= category[id]["Price"]*number
-            category[id]["Number"] -= number
-            if category[id]["Number"] == 0:
-                db.DELETE(category, id, position = self.current_position)
-            print("-"*50)
-            print("You've successfully purchased the product!")
-
     def return_back(self, position):
         """Takes the user back"""        
         match position:
@@ -252,8 +222,44 @@ class Console:
             case "db_category_choosing":
                 self.read_db_action()
 
+    def refill_balance(self, balance):
+        """Refilling balance"""
+        try:
+            print("-"*50)
+            balance = int(input("Enter the number to top up the account(For example: 300): "))
+        except ValueError:
+            print("-"*50)
+            print("Invalid input, try again.")
+            self.refill_balance()
+
+    def show_products_list(self, category):
+        """Printing list of products of certain category"""
+        print("-"*50)    
+        for product in category:
+            print("ID: ", product["ID"])
+            print("Name: ", product["Name"])
+            print("Number: ", product["Number"])
+            print("Price: ", product["Price"])
+            print("-"*50)
+
     def is_empty_category(self, category, db):
         if len(category) == 0:
             print("-"*50)
             print("This category is empty!")
             self.get_category(db)
+
+    def availability_check(self, number, category):
+        if category[id]["Number"] - number < 0:
+            print("-"*50)
+            print("We don't have this number of products.")
+            return False
+        else:
+            return True
+
+    def balance_check(self, balance, number, category):
+        if balance - category[id]["Price"]*number < 0:
+            print("-"*50)
+            print("You don't have enough money to buy this product.")
+            return False
+        else:
+            return True
