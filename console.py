@@ -26,7 +26,7 @@ class Console:
         else:
             return True
 
-    def get_category(self):
+    def get_category_name(self):
         """Reads users entered category and saves it to the variable"""
         print("-"*50)
         print(("Categories: \nEnter CPU for CPUs/Processors; \n"
@@ -43,7 +43,7 @@ class Console:
         elif self.__is_valid_category(category_name):
             return category_name
         else:
-            self.get_category()
+            self.get_category_name()
         
     def __is_valid_category(self, category_name):
         """Category input validation"""        
@@ -58,10 +58,8 @@ class Console:
 
     def show_balance(self, balance):
         """Outputs users balance"""        
-        self.current_position = "balance"
         print("-"*50)
         print(f"Your balance: {balance}$")
-        self.return_back(self.current_position)
 
     def create_password(self):
         """Creates password for admin panel"""        
@@ -231,6 +229,9 @@ class Console:
         if len(category_len) == 0:
             print("-"*50)
             print("This category is empty!")
+            return True
+        else:
+            return False
 
     def availability_check(self, number, db_number_of_product):
         if db_number_of_product - number < 0:
@@ -240,8 +241,8 @@ class Console:
         else:
             return True
 
-    def balance_check(self, balance, number, category):
-        if balance - category[id]["Price"]*number < 0:
+    def balance_check(self, balance, number, product_price):
+        if balance - product_price*number < 0:
             print("-"*50)
             print("You don't have enough money to buy this product.")
             return False
